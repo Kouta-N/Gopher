@@ -2,14 +2,37 @@ package main
 
 import "fmt"
 
-func swap(x, y int) (x2, y2 int) {
-	y2, x2 = x, y
-	return //名前つき戻り値のおかげでいちいち定義しなくてもよい
-	//何をreturnしているのか分かりにくくなるのであまり実務では使用しない
-}
-
 func main() {
-	a := 20
-	b := 10
-	fmt.Println(swap(a, b))
+	// fs := make([]func() string, 3) //文字型を返す関数を2つスライスで用意
+	// //makeはlengthを指定しないとcapのみを定義する。
+	// fs[0] = func() string { return "hoge" }
+	// fs[1] = func() string { return "fuga" }
+	// fs[2] = func() string { return "gaga" }
+	// for _, f := range fs {
+	// 	fmt.Println(f())
+	// }
+
+	// fs := make([]func(), 3)
+	// for i := range fs {
+	// 	fs[i] = func() { fmt.Println(i) }
+	// }
+	// for _, f := range fs {
+	// 	f()//iの値は2になったところで終わってるので出力は全て2
+	// }
+
+	fs := make([]func(), 3)
+	for i := range fs {
+		i := i                 //スコープが変わり、変数が毎回新規作成されるようになった
+		fmt.Printf("%p\n", &i) //iのポインタは毎回変わる
+		fs[i] = func() { fmt.Println(i) }
+	}
+	for _, f := range fs {
+		f()
+	}
+
+	for i := range fs {
+		func(i int) {
+			fmt.Println(i)
+		}(i)
+	}
 }
